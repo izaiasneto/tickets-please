@@ -2,7 +2,8 @@
 
 namespace App\Traits;
 
-trait ApiResponses {
+trait ApiResponses 
+{
     protected function ok($message, $data = []) {
         return $this->success($message, $data, 200);
     }
