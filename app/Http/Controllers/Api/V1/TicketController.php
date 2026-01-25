@@ -32,14 +32,12 @@ class TicketController extends ApiController
     public function store(StoreTicketRequest $request)
     {
         try {
-            $user = User::findOrFail($request->input('data.relationships.author.data.id'));
+            $this->isAble('store', Ticket::class); 
 
-            $this->isAble('store', null); 
+            return new TicketResource(Ticket::create($request->mappedAttributes()));
 
-        } catch (ModelNotFoundException $exception) {
-            return $this->ok('User not foud', [
-                'error' => 'The provided user id does not exists',
-            ]);
+        } catch (AuthorizationException $exception) {
+            return $this->error('You are not authorized to update that resource', 401);
         }
 
         return new TicketResource(Ticket::create($request->mappedAttributes()));
